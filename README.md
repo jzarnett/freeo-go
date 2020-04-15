@@ -10,3 +10,6 @@ Hackathon in the Freeo team. It
 2. `/v1/features/{companyId}` - returns a list of the features for this company, including their name and their visibility (visible, hidden, or upsell).
 3. `/v1/{planName}/features` - returns a list of the features associated with a specific plan, including their name and their visibility  (visible, hidden, or upsell).
 
+## Requirements
+
+`go get -u github.com/gorilla/muxz`

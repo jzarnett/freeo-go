@@ -24,15 +24,19 @@ func TestAllFeatures(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	expected := `[{"feature":"Plastic Cards","description":"Allow users to have plastic cards and not just virtual ones"}]`
+	expected := `[{"feature":"Plastic Cards","description":"Allow users to have plastic cards"},`
+	expected += `{"feature":"External Bookkeeper","description":"Allow inviting an external bookkeeper"},`
+	expected += `{"feature":"Teams","description":"Allow assigning users to teams"},`
+	expected += `{"feature":"Team Limits","description":"Allow spending lomits at the team level"},`
+	expected += `{"feature":"Export to XYZ","description":"Allow export to the XYZ Accounting service"}]`
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
 	}
 }
 
-func TestCompanyFeatures(t *testing.T) {
-	req, err := http.NewRequest("GET", "/v1/features/44077d57-38ce-472d-b806-48c87173f76c", nil)
+func TestCompanyFeaturesFree(t *testing.T) {
+	req, err := http.NewRequest("GET", "/v1/features/d83c34c0-a7a8-42ff-bba6-351d1b647f26", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +50,37 @@ func TestCompanyFeatures(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	expected := `[{"feature":"Plastic Cards","access":"hidden"},{"feature":"Self-Onboarding","access":"visible"},{"feature":"Teams","access":"upsell"}]`
+	expected := `[{"feature":"Plastic Cards","access":"upsell"},`
+	expected += `{"feature":"External Bookkeeper","access":"upsell"},`
+	expected += `{"feature":"Teams","access":"hidden"},`
+	expected += `{"feature":"Team Limits","access":"hidden"},`
+	expected += `{"feature":"Export to XYZ","access":"visible"}]`
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body.String(), expected)
+	}
+}
+
+func TestCompanyFeaturesPaid(t *testing.T) {
+	req, err := http.NewRequest("GET", "/v1/features/3b0628c5-4281-495a-9a5f-789585e95074", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	router := mux.NewRouter()
+	router.HandleFunc("/v1/features/{companyId}", CompanyFeatures)
+	router.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	expected := `[{"feature":"Plastic Cards","access":"visible"},`
+	expected += `{"feature":"External Bookkeeper","access":"upsell"},`
+	expected += `{"feature":"Teams","access":"visible"},`
+	expected += `{"feature":"Team Limits","access":"hidden"},`
+	expected += `{"feature":"Export to XYZ","access":"visible"}]`
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
@@ -74,8 +108,8 @@ func TestCompanyFeaturesUnknown(t *testing.T) {
 	}
 }
 
-func TestPlanFeatures(t *testing.T) {
-	req, err := http.NewRequest("GET", "/v1/plan/basic/features", nil)
+func TestPlanFeaturesFree(t *testing.T) {
+	req, err := http.NewRequest("GET", "/v1/plan/Free/features", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -88,8 +122,11 @@ func TestPlanFeatures(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
-
-	expected := `[{"feature":"Plastic Cards","access":"upsell"},{"feature":"Self-Onboarding","access":"visible"}]`
+	expected := `[{"feature":"Plastic Cards","access":"upsell"},`
+	expected += `{"feature":"External Bookkeeper","access":"upsell"},`
+	expected += `{"feature":"Teams","access":"hidden"},`
+	expected += `{"feature":"Team Limits","access":"hidden"},`
+	expected += `{"feature":"Export to XYZ","access":"visible"}]`
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
