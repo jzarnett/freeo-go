@@ -12,7 +12,7 @@ Hackathon in the Freeo team. It
 
 ## Requirements
 
-`go get -u github.com/gorilla/mux`
+`brew install go`
 `go get github.com/aws/aws-lambda-go/lambda`
 
 ## Building

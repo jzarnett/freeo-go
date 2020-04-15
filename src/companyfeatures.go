@@ -5,8 +5,8 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func companyFeaturesHandler(req events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
-	return CompanyFeatures(req.PathParameters["companyId"])
+func companyFeaturesHandler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return CompanyFeatures(req.PathParameters["companyId"]), nil
 }
 
 func main() {

@@ -5,8 +5,8 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func planFeaturesHandler(req events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
-	return PlanFeatures(req.PathParameters["planName"])
+func planFeaturesHandler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return PlanFeatures(req.PathParameters["planName"]), nil
 }
 
 func main() {
