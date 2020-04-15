@@ -77,13 +77,13 @@ func getFeaturesForCompany(companyID string) []featureAccess {
 			Access:  VISIBLE}
 		f2 := featureAccess{
 			Feature: "External Bookkeeper",
-			Access:  UPSELL}
+			Access:  VISIBLE}
 		f3 := featureAccess{
 			Feature: "Teams",
 			Access:  VISIBLE}
 		f4 := featureAccess{
 			Feature: "Team Limits",
-			Access:  HIDDEN}
+			Access:  VISIBLE}
 		f5 := featureAccess{
 			Feature: "Export to XYZ",
 			Access:  VISIBLE}

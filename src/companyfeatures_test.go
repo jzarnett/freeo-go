@@ -32,9 +32,9 @@ func TestCompanyFeaturesPaid(t *testing.T) {
 	}
 
 	expected := `[{"feature":"Plastic Cards","access":"visible"},`
-	expected += `{"feature":"External Bookkeeper","access":"upsell"},`
+	expected += `{"feature":"External Bookkeeper","access":"visible"},`
 	expected += `{"feature":"Teams","access":"visible"},`
-	expected += `{"feature":"Team Limits","access":"hidden"},`
+	expected += `{"feature":"Team Limits","access":"visible"},`
 	expected += `{"feature":"Export to XYZ","access":"visible"}]`
 	if res.Body != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
