@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"log"
-	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/aws/aws-lambda-go/events"
 )
 
 const (
@@ -176,44 +174,45 @@ func getFeaturesForPlan(plan string) []featureAccess {
 	return nil
 }
 
-func writeResult(w http.ResponseWriter, features []featureAccess) {
+func buildResponse(features []featureAccess) events.APIGatewayProxyResponse {
+	resp := events.APIGatewayProxyResponse{Headers: make(map[string]string)}
 	if features == nil {
-		w.WriteHeader(404)
-		return
+		resp.StatusCode = 404
+		return resp
 	}
 
 	marshalled, err := json.Marshal(features)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte(err.Error()))
-		return
+		resp.StatusCode = 500
+		resp.Body = err.Error()
+		return resp
 	}
 
-	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(200)
-	w.Write(marshalled)
+	resp.StatusCode = 200
+	resp.Headers["Content-Type"] = "application/json"
+	resp.Body = string(marshalled[:])
+	return resp
 }
 
 // AllFeatures - Handler for requesting all features
-func AllFeatures(w http.ResponseWriter, r *http.Request) {
+func AllFeatures() events.APIGatewayProxyResponse {
 	features := getAllFeatures()
-	writeResult(w, features)
+	return buildResponse(features)
 }
 
 // CompanyFeatures - handler for finding what features this company has
-func CompanyFeatures(w http.ResponseWriter, r *http.Request) {
-	pathParams := mux.Vars(r)
-	features := getFeaturesForCompany(pathParams["companyId"])
-	writeResult(w, features)
+func CompanyFeatures(companyID string) events.APIGatewayProxyResponse {
+	features := getFeaturesForCompany(companyID)
+	return buildResponse(features)
 }
 
 // PlanFeatures - handler for finding what features are in a given plan
-func PlanFeatures(w http.ResponseWriter, r *http.Request) {
-	pathParams := mux.Vars(r)
-	features := getFeaturesForPlan(pathParams["planName"])
-	writeResult(w, features)
+func PlanFeatures(plan string) events.APIGatewayProxyResponse {
+	features := getFeaturesForPlan(plan)
+	return buildResponse(features)
 }
 
+/*
 func main() {
 	r := mux.NewRouter()
 	api := r.PathPrefix("/v1").Subrouter()
@@ -223,3 +222,4 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
+*/
