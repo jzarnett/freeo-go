@@ -12,4 +12,4 @@ Hackathon in the Freeo team. It
 
 ## Requirements
 
-`go get -u github.com/gorilla/muxz`
+`go get -u github.com/gorilla/mux`
