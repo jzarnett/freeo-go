@@ -19,159 +19,66 @@ type featureAccess struct {
 	Description string `json:"description,omitempty"`
 }
 
+var everyFeature = []featureAccess{
+	featureAccess{
+		Feature:     "Plastic-Cards",
+		Description: "Allow users to have plastic cards"},
+	featureAccess{
+		Feature:     "External-Bookkeeper",
+		Description: "Allow inviting an external bookkeeper"},
+	featureAccess{
+		Feature:     "Teams",
+		Description: "Allow assigning users to teams"},
+	featureAccess{
+		Feature:     "Team-Limits",
+		Description: "Allow spending limits at the team level"},
+	featureAccess{
+		Feature:     "Export-to-XYZ",
+		Description: "Allow export to the XYZ Accounting service"}}
+
+var premiumCompanyUUID = "736af17e-8414-4e31-92f2-64b9e625ac6d"
+var freeTierCompanyUUID = "d83c34c0-a7a8-42ff-bba6-351d1b647f26"
+var otherCompanyUUID = "3b0628c5-4281-495a-9a5f-789585e95074"
+
+var planMap = map[string][]featureAccess{
+	"Free": {featureAccess{Feature: "Plastic-Cards", Access: UPSELL},
+		featureAccess{Feature: "External-Bookkeeper", Access: UPSELL},
+		featureAccess{Feature: "Teams", Access: HIDDEN},
+		featureAccess{Feature: "Team-Limits", Access: HIDDEN},
+		featureAccess{Feature: "Export-to-XYZ", Access: UPSELL}},
+	"Essential": {featureAccess{Feature: "Plastic-Cards", Access: VISIBLE},
+		featureAccess{Feature: "External-Bookkeeper", Access: VISIBLE},
+		featureAccess{Feature: "Teams", Access: UPSELL},
+		featureAccess{Feature: "Team-Limits", Access: UPSELL},
+		featureAccess{Feature: "Export-to-XYZ", Access: VISIBLE}},
+	"Premium": {featureAccess{Feature: "Plastic-Cards", Access: VISIBLE},
+		featureAccess{Feature: "External-Bookkeeper", Access: VISIBLE},
+		featureAccess{Feature: "Teams", Access: VISIBLE},
+		featureAccess{Feature: "Team-Limits", Access: VISIBLE},
+		featureAccess{Feature: "Export-to-XYZ", Access: VISIBLE}},
+	"Pro": {featureAccess{Feature: "Plastic-Cards", Access: VISIBLE},
+		featureAccess{Feature: "External-Bookkeeper", Access: VISIBLE},
+		featureAccess{Feature: "Teams", Access: VISIBLE},
+		featureAccess{Feature: "Team-Limits", Access: VISIBLE},
+		featureAccess{Feature: "Export-to-XYZ", Access: VISIBLE}}}
+
+var companyMap = map[string][]featureAccess{
+	premiumCompanyUUID:  planMap["Premium"],
+	freeTierCompanyUUID: planMap["Free"],
+	otherCompanyUUID:    planMap["Essential"]}
+
 func getAllFeatures() []featureAccess {
 	// Dummy implementation
-	f1 := featureAccess{
-		Feature:     "Plastic Cards",
-		Description: "Allow users to have plastic cards"}
-	f2 := featureAccess{
-		Feature:     "External Bookkeeper",
-		Description: "Allow inviting an external bookkeeper"}
-	f3 := featureAccess{
-		Feature:     "Teams",
-		Description: "Allow assigning users to teams"}
-	f4 := featureAccess{
-		Feature:     "Team Limits",
-		Description: "Allow spending lomits at the team level"}
-	f5 := featureAccess{
-		Feature:     "Export to XYZ",
-		Description: "Allow export to the XYZ Accounting service"}
-	features := make([]featureAccess, 5)
-	features[0] = f1
-	features[1] = f2
-	features[2] = f3
-	features[3] = f4
-	features[4] = f5
-	return features
+	return everyFeature
 }
 
 func getFeaturesForCompany(companyID string) []featureAccess {
 	// Dummy implementation
-	if companyID == "d83c34c0-a7a8-42ff-bba6-351d1b647f26" {
-		// FREE tier company
-		f1 := featureAccess{
-			Feature: "Plastic Cards",
-			Access:  UPSELL}
-		f2 := featureAccess{
-			Feature: "External Bookkeeper",
-			Access:  UPSELL}
-		f3 := featureAccess{
-			Feature: "Teams",
-			Access:  HIDDEN}
-		f4 := featureAccess{
-			Feature: "Team Limits",
-			Access:  HIDDEN}
-		f5 := featureAccess{
-			Feature: "Export to XYZ",
-			Access:  VISIBLE}
-		features := make([]featureAccess, 5)
-		features[0] = f1
-		features[1] = f2
-		features[2] = f3
-		features[3] = f4
-		features[4] = f5
-		return features
-	} else if companyID == "3b0628c5-4281-495a-9a5f-789585e95074" {
-		f1 := featureAccess{
-			Feature: "Plastic Cards",
-			Access:  VISIBLE}
-		f2 := featureAccess{
-			Feature: "External Bookkeeper",
-			Access:  VISIBLE}
-		f3 := featureAccess{
-			Feature: "Teams",
-			Access:  VISIBLE}
-		f4 := featureAccess{
-			Feature: "Team Limits",
-			Access:  VISIBLE}
-		f5 := featureAccess{
-			Feature: "Export to XYZ",
-			Access:  VISIBLE}
-		features := make([]featureAccess, 5)
-		features[0] = f1
-		features[1] = f2
-		features[2] = f3
-		features[3] = f4
-		features[4] = f5
-		return features
-	}
-	return nil
+	return companyMap[companyID]
 }
 
 func getFeaturesForPlan(plan string) []featureAccess {
-	// Dummy implementation
-	if plan == "Free" {
-		// FREE tier company
-		f1 := featureAccess{
-			Feature: "Plastic Cards",
-			Access:  UPSELL}
-		f2 := featureAccess{
-			Feature: "External Bookkeeper",
-			Access:  UPSELL}
-		f3 := featureAccess{
-			Feature: "Teams",
-			Access:  HIDDEN}
-		f4 := featureAccess{
-			Feature: "Team Limits",
-			Access:  HIDDEN}
-		f5 := featureAccess{
-			Feature: "Export to XYZ",
-			Access:  VISIBLE}
-		features := make([]featureAccess, 5)
-		features[0] = f1
-		features[1] = f2
-		features[2] = f3
-		features[3] = f4
-		features[4] = f5
-		return features
-	} else if plan == "Essential" || plan == "Premium" {
-		f1 := featureAccess{
-			Feature: "Plastic Cards",
-			Access:  VISIBLE}
-		f2 := featureAccess{
-			Feature: "External Bookkeeper",
-			Access:  UPSELL}
-		f3 := featureAccess{
-			Feature: "Teams",
-			Access:  VISIBLE}
-		f4 := featureAccess{
-			Feature: "Team Limits",
-			Access:  HIDDEN}
-		f5 := featureAccess{
-			Feature: "Export to XYZ",
-			Access:  VISIBLE}
-		features := make([]featureAccess, 5)
-		features[0] = f1
-		features[1] = f2
-		features[2] = f3
-		features[3] = f4
-		features[4] = f5
-		return features
-	} else if plan == "Pro" {
-		f1 := featureAccess{
-			Feature: "Plastic Cards",
-			Access:  VISIBLE}
-		f2 := featureAccess{
-			Feature: "External Bookkeeper",
-			Access:  VISIBLE}
-		f3 := featureAccess{
-			Feature: "Teams",
-			Access:  VISIBLE}
-		f4 := featureAccess{
-			Feature: "Team Limits",
-			Access:  VISIBLE}
-		f5 := featureAccess{
-			Feature: "Export to XYZ",
-			Access:  VISIBLE}
-		features := make([]featureAccess, 5)
-		features[0] = f1
-		features[1] = f2
-		features[2] = f3
-		features[3] = f4
-		features[4] = f5
-		return features
-	}
-	return nil
+	return planMap[plan]
 }
 
 func buildResponse(features []featureAccess) events.APIGatewayProxyResponse {
