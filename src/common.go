@@ -97,6 +97,7 @@ func buildResponse(features []featureAccess) events.APIGatewayProxyResponse {
 
 	resp.StatusCode = 200
 	resp.Headers["Content-Type"] = "application/json"
+	resp.Headers["Access-Control-Allow-Origin"] = "*"
 	resp.Body = string(marshalled[:])
 	return resp
 }
