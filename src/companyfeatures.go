@@ -5,10 +5,10 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func handler(req events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
+func companyFeaturesHandler(req events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
 	return CompanyFeatures(req.PathParameters["companyId"])
 }
 
 func main() {
-	lambda.Start(handler)
+	lambda.Start(companyFeaturesHandler)
 }

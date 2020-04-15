@@ -18,3 +18,7 @@ Hackathon in the Freeo team. It
 ## Building
 
 `./build.sh`
+
+## Testing
+
+`./test.sh`
